@@ -3,6 +3,7 @@ import express from 'express';
  
 let board = Array.apply(null, Array(20)).map(x=> Array(20))
 const app = express();
+app.use('/', express.static('game'));
 let cnter =0;
 app.use ('*', function (_, res, next) {
     res.header("Access-Control-Allow-Origin", "*");
@@ -36,7 +37,7 @@ app.get('/move/:x/:y', (req, res) => {
     res.send(board);
 });
 
-const PORT = 8080;
+const PORT = 8081;
  
 app.listen(PORT, () => {
     console.log(`Running on PORT ${PORT}`);
