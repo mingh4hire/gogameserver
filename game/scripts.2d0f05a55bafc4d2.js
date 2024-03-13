@@ -1,0 +1,1 @@
+function aa(){console.log("print aa")}function bb(){console.log("print bb")}console.log("done");
