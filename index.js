@@ -12,27 +12,27 @@ app.use('*', (req, res, next) => {
     next();
 })
 
-app.use('/', express.static('game'));
+app.use('/', express.static('.'));
 
-app.get('/messages', (req, res) => {
+app.get('/messages', (_, res) => {
     res.send(convo);
 });
 
-app.get('/wslist', (req, res) => {
+app.get('/wslist', (_, res) => {
     res.send(wslist);
 });
 
-app.get('/board', (req, res) => {
+app.get('/board', (_, res) => {
     res.send(board);
 });
-app.get('/restart', (req, res) => {
+app.get('/restart', (_, res) => {
     cnter = 0;
-    board = Array.apply(1, Array(20)).map(x => Array(20))
+    board = Array.apply(1, Array(20)).map(_ => Array(20))
     res.send();
 });
 
 
-app.get('/move/:x/:y', (req, res) => {
+app.post('/move/:x/:y', (req, res) => {
     const cnt = board.reduce((x, y) => x + y.reduce((prev, next) => prev + (next ? 1 : 0), 0), 0);
     const x = +req.params.x;
     const y = +req.params.y;
