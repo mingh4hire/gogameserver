@@ -15,14 +15,12 @@ app.use('*', (req, res, next) => {
 app.use('/', express.static('game'));
 
 app.get('/messages', (req, res) => {
-
     res.send(convo);
 });
-app.get('/wslist', (req, res) => {
 
+app.get('/wslist', (req, res) => {
     res.send(wslist);
 });
-
 
 app.get('/board', (req, res) => {
     res.send(board);
@@ -49,16 +47,10 @@ app.get('/move/:x/:y', (req, res) => {
     for (const sock of wslist) {
         sock.send(JSON.stringify({board}));
     }
-
     res.send(board);
-    
 });
 
-
-
 const server = http.createServer(app);
-
-
 const wss = new WebSocket.Server({ server });
 
 const wslist = [];
@@ -74,6 +66,9 @@ wss.getUniqueID = function () {
 
 let addmessageEvent = (ws) => {
     ws.on('message', (message) => {
+        console.log('message is ', message.toString())
+        console.log('message is ', message)
+
         convo.push(JSON.parse(message.toString()));
 
         for (const sock of wslist) {
@@ -82,8 +77,6 @@ let addmessageEvent = (ws) => {
                 sock.send(message.toString());
             }
         }
-        console.log('message is ', message.toString())
-        console.log('message is ', message)
     });
 }
 
@@ -91,15 +84,11 @@ wss.on('connection', (ws) => {
     ws.id = wss.getUniqueID();
     wslist.push(ws);
     wsids.push(ws);
-
     wss.clients.forEach(function each(client) {
         console.log('Client.ID: ' + client.id);
     });
     addmessageEvent(ws);
-
 });
-
-
 
 let checkwin = (x, y) => {
     let isgreen = -1;
@@ -111,6 +100,7 @@ let checkwin = (x, y) => {
     checkvert(x, y, isgreen);
     checkhoriz(x, y, isgreen);
 }
+
 let checkhoriz = (x, y, isgreen) => {
     let i = x;
     let cnt = 1;
@@ -180,10 +170,6 @@ let checkdiag2 = (x, y, isgreen) => {
         });
     }
 }
-
-
-
-
 
 //start our server
 server.listen(3000, () => {
